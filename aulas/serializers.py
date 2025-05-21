@@ -8,13 +8,16 @@ class PlaylistSerializer(serializers.ModelSerializer):
         read_only_fields = ['id', 'professor']
 
 class VideoSerializer(serializers.ModelSerializer):
+    playlists = PlaylistSerializer(many=True, read_only=True)
+    playlists_ids = serializers.PrimaryKeyRelatedField(
+        queryset=Playlist.objects.all(), many=True, write_only=True, source='playlists'
+    )
     arquivo = serializers.FileField(required=True)
-    playlists = serializers.PrimaryKeyRelatedField(queryset=Playlist.objects.all(), many=True, required=False)
-
+    
     class Meta:
         model = Video
-        fields = ['id', 'titulo', 'descricao', 'arquivo', 'criado_em', 'professor', 'playlists']
-        read_only_fields = ['id', 'criado_em', 'professor']
+        fields = ['id', 'titulo', 'descricao', 'arquivo', 'criado_em', 'professor', 'playlists', 'playlists_ids']
+        read_only_fields = ['id', 'criado_em', 'professor', 'playlists']
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:

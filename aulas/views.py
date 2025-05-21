@@ -2,9 +2,11 @@ from rest_framework import viewsets, filters, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
 from .models import Video, Playlist
 from .permissions import IsProfessorOrReadOnly
 from .serializers import RegisterSerializer,UserSerializer,VideoSerializer,PlaylistSerializer
+
 
 class PlaylistViewSet(viewsets.ModelViewSet):
     queryset = Playlist.objects.all()
@@ -13,6 +15,13 @@ class PlaylistViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(professor=self.request.user)
+
+    @action(detail=True, methods=['get'], url_path='videos')
+    def videos(self, request, pk=None):
+        playlist = self.get_object()
+        videos = playlist.videos.all()
+        serializer = VideoSerializer(videos, many=True)
+        return Response(serializer.data)
 
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
