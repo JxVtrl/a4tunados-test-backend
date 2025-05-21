@@ -1,0 +1,4 @@
+venv/*
+core/__pycache__
+aulas/migrations/__pycache__
+aulas/__pycache__
