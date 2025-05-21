@@ -2,9 +2,19 @@ from rest_framework import viewsets, filters, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Video
+from .models import Video, Categoria, Playlist
 from .permissions import IsProfessorOrReadOnly
-from .serializers import RegisterSerializer,UserSerializer,VideoSerializer
+from .serializers import RegisterSerializer,UserSerializer,VideoSerializer,CategoriaSerializer,PlaylistSerializer
+
+class CategoriaViewSet(viewsets.ModelViewSet):
+    queryset = Categoria.objects.all()
+    serializer_class = CategoriaSerializer
+    permission_classes = [IsProfessorOrReadOnly]
+
+class PlaylistViewSet(viewsets.ModelViewSet):
+    queryset = Playlist.objects.all()
+    serializer_class = PlaylistSerializer
+    permission_classes = [IsProfessorOrReadOnly]
 
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()
