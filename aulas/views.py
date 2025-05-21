@@ -2,19 +2,17 @@ from rest_framework import viewsets, filters, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
-from .models import Video, Categoria, Playlist
+from .models import Video, Playlist
 from .permissions import IsProfessorOrReadOnly
-from .serializers import RegisterSerializer,UserSerializer,VideoSerializer,CategoriaSerializer,PlaylistSerializer
-
-class CategoriaViewSet(viewsets.ModelViewSet):
-    queryset = Categoria.objects.all()
-    serializer_class = CategoriaSerializer
-    permission_classes = [IsProfessorOrReadOnly]
+from .serializers import RegisterSerializer,UserSerializer,VideoSerializer,PlaylistSerializer
 
 class PlaylistViewSet(viewsets.ModelViewSet):
     queryset = Playlist.objects.all()
     serializer_class = PlaylistSerializer
     permission_classes = [IsProfessorOrReadOnly]
+
+    def perform_create(self, serializer):
+        serializer.save(professor=self.request.user)
 
 class VideoViewSet(viewsets.ModelViewSet):
     queryset = Video.objects.all()

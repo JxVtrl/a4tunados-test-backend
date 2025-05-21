@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from aulas.views import VideoViewSet, RegisterView, MeView, CategoriaViewSet, PlaylistViewSet
+from aulas.views import VideoViewSet, RegisterView, MeView, PlaylistViewSet
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -11,7 +11,6 @@ from django.conf.urls.static import static
 
 router = DefaultRouter()
 router.register(r'videos', VideoViewSet, basename='video')
-router.register(r'categorias', CategoriaViewSet, basename='categoria')
 router.register(r'playlists', PlaylistViewSet, basename='playlist')
 
 urlpatterns = [
