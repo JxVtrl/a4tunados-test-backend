@@ -151,11 +151,15 @@ CORS_ALLOW_CREDENTIALS = True
 # Configurar CORS para permitir o frontend
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",  # Substitua pelo domínio do frontend
+    "https://a4tunados-test-frontend.vercel.app",
+    "https://a4tunados-test-frontend-e3eganrb8-joo-vinicius-vitrals-projects.vercel.app",
 ]
 
 # Configurar CSRF para aceitar cookies
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # Substitua pelo domínio do frontend
+    "https://a4tunados-test-frontend.vercel.app",
+    "https://a4tunados-test-frontend-e3eganrb8-joo-vinicius-vitrals-projects.vercel.app",
 ]
 
 # Adicionar configurações de cookie JWT
