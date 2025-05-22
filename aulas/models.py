@@ -24,6 +24,7 @@ class Video(models.Model):
     arquivo = models.FileField(upload_to='videos/')
     criado_em = models.DateTimeField(auto_now_add=True)
     professor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='videos')
+    thumbnail = models.ImageField(upload_to='thumbnails/', blank=True, null=True)  # Miniatura do vídeo
 
     def __str__(self):
         return self.titulo

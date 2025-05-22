@@ -10,6 +10,9 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from rest_framework_simplejwt.exceptions import InvalidToken, TokenError
 from rest_framework import status
+import os
+import subprocess
+from django.conf import settings
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -43,7 +46,10 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     permission_classes = [IsProfessorOrReadOnly]
 
     def get_queryset(self):
+        user = self.request.user
         queryset = Playlist.objects.all()
+        if user.is_authenticated and getattr(user, 'tipo', None) == 'professor':
+            queryset = queryset.filter(professor=user)
         professor_id = self.request.query_params.get('professor')
         if professor_id:
             queryset = queryset.filter(professor_id=professor_id)
@@ -74,7 +80,29 @@ class VideoViewSet(viewsets.ModelViewSet):
     search_fields = ['titulo', 'descricao']
 
     def perform_create(self, serializer):
-        serializer.save(professor=self.request.user)
+        video = serializer.save(professor=self.request.user)
+        # Geração automática de thumbnail usando ffmpeg
+        if video.arquivo:
+            video_path = video.arquivo.path
+            thumb_name = f"thumb_{video.id}.jpg"
+            thumb_path = os.path.join(settings.MEDIA_ROOT, 'thumbnails', thumb_name)
+            os.makedirs(os.path.dirname(thumb_path), exist_ok=True)
+            # Comando ffmpeg: pega um frame no segundo 1
+            cmd = [
+                'ffmpeg',
+                '-i', video_path,
+                '-ss', '00:00:01.000',
+                '-vframes', '1',
+                '-vf', 'scale=480:-1',
+                thumb_path
+            ]
+            try:
+                subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                # Salva o caminho da thumbnail no modelo
+                video.thumbnail.name = f'thumbnails/{thumb_name}'
+                video.save(update_fields=['thumbnail'])
+            except Exception as e:
+                print(f'Erro ao gerar thumbnail: {e}')
 
     def get_queryset(self):
         user = self.request.user
