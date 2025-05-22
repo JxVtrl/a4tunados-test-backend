@@ -13,10 +13,11 @@ class VideoSerializer(serializers.ModelSerializer):
         queryset=Playlist.objects.all(), many=True, write_only=True, source='playlists'
     )
     arquivo = serializers.FileField(required=True)
+    professor_nome = serializers.CharField(source='professor.username', read_only=True)  # Adiciona o nome do professor
     
     class Meta:
         model = Video
-        fields = ['id', 'titulo', 'descricao', 'arquivo', 'criado_em', 'professor', 'playlists', 'playlists_ids']
+        fields = ['id', 'titulo', 'descricao', 'arquivo', 'criado_em', 'professor', 'professor_nome', 'playlists', 'playlists_ids']
         read_only_fields = ['id', 'criado_em', 'professor', 'playlists']
 
 class UserSerializer(serializers.ModelSerializer):
