@@ -68,7 +68,7 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     def videos(self, request, pk=None):
         playlist = self.get_object()
         videos = playlist.videos.all()
-        serializer = VideoSerializer(videos, many=True)
+        serializer = VideoSerializer(videos, many=True, context={'request': request})
         return Response(serializer.data)
 
 class VideoViewSet(viewsets.ModelViewSet):
