@@ -25,7 +25,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t majorssolutions/a4tunados-backend:latest ./backend
+          docker build -t majorssolutions/a4tunados-backend:latest ./
           docker push majorssolutions/a4tunados-backend:latest
 
       - name: Deploy to VPS via SSH
