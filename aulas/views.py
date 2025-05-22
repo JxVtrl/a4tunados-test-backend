@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import action
-from .models import Video, Playlist
+from .models import Video, Playlist, User
 from .permissions import IsProfessorOrReadOnly
 from .serializers import RegisterSerializer,UserSerializer,VideoSerializer,PlaylistSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -42,6 +42,13 @@ class PlaylistViewSet(viewsets.ModelViewSet):
     serializer_class = PlaylistSerializer
     permission_classes = [IsProfessorOrReadOnly]
 
+    def get_queryset(self):
+        queryset = Playlist.objects.all()
+        professor_id = self.request.query_params.get('professor')
+        if professor_id:
+            queryset = queryset.filter(professor_id=professor_id)
+        return queryset
+
     def perform_create(self, serializer):
         serializer.save(professor=self.request.user)
         
@@ -71,11 +78,15 @@ class VideoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
+        queryset = Video.objects.all()
         if user.is_authenticated and getattr(user, 'tipo', None) == 'professor':
             # Professor vê apenas seus próprios vídeos
-            return Video.objects.filter(professor=user)
-        # Aluno vê todos os vídeos cadastrados (ou pode filtrar por lógica de acesso)
-        return Video.objects.all()
+            queryset = queryset.filter(professor=user)
+        # Filtro por professor na query string
+        professor_id = self.request.query_params.get('professor')
+        if professor_id:
+            queryset = queryset.filter(professor_id=professor_id)
+        return queryset
     
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
@@ -111,3 +122,11 @@ class CookieTokenRefreshView(TokenRefreshView):
             return response
         except (TokenError, Exception):
             return Response({'detail': 'Token inválido ou usuário não existe.'}, status=status.HTTP_401_UNAUTHORIZED)
+
+class ProfessoresListView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        professores = User.objects.filter(tipo='professor')
+        serializer = UserSerializer(professores, many=True)
+        return Response(serializer.data)
