@@ -15,6 +15,12 @@ class PlaylistViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(professor=self.request.user)
+        
+    def perform_update(self, serializer):
+        playlist = self.get_object()
+        if playlist.professor != self.request.user:
+            raise PermissionError("Você não tem permissão para editar esta playlist.")
+        serializer.save()
 
     @action(detail=True, methods=['get'], url_path='videos')
     def videos(self, request, pk=None):

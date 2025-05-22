@@ -2,9 +2,10 @@ from rest_framework import serializers
 from .models import Video, User, Playlist
 
 class PlaylistSerializer(serializers.ModelSerializer):
+    foto = serializers.ImageField(required=False) 
     class Meta:
         model = Playlist
-        fields = ['id', 'nome', 'descricao', 'professor', 'videos']
+        fields = ['id', 'nome', 'descricao', 'professor', 'videos', 'foto']
         read_only_fields = ['id', 'professor']
 
 class VideoSerializer(serializers.ModelSerializer):

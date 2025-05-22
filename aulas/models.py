@@ -13,6 +13,7 @@ class Playlist(models.Model):
     descricao = models.TextField(blank=True)
     professor = models.ForeignKey(User, on_delete=models.CASCADE, related_name='playlists')
     videos = models.ManyToManyField('Video', related_name='playlists', blank=True)
+    foto = models.ImageField(upload_to='playlists/', blank=True, null=True) 
 
     def __str__(self):
         return self.nome
