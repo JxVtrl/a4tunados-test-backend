@@ -27,7 +27,12 @@ SECRET_KEY = 'django-insecure--0*_#)(h(2m280z!46&tu*_f=(b+^z_3c5al!)p5$$4z^cqkb@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+    '.ngrok-free.app',
+    'a4tunados-test-frontend.vercel.app',
+]
 
 
 # Application definition
@@ -45,6 +50,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -52,7 +58,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -143,14 +148,13 @@ REST_FRAMEWORK = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# CORS para desenvolvimento
-CORS_ALLOW_ALL_ORIGINS = True
+# CORS para produção
+CORS_ALLOW_ALL_ORIGINS = False
 
 CORS_ALLOW_CREDENTIALS = True
 
-# Configurar CORS para permitir o frontend
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # Substitua pelo domínio do frontend
+    "http://localhost:3000",
     "https://a4tunados-test-frontend.vercel.app",
     "https://a4tunados-test-frontend-e3eganrb8-joo-vinicius-vitrals-projects.vercel.app",
 ]
