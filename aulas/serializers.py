@@ -28,16 +28,26 @@ class VideoSerializer(serializers.ModelSerializer):
     professor_nome = serializers.CharField(source='professor.username', read_only=True)  # Adiciona o nome do professor
     thumbnail = serializers.ImageField(required=False, allow_null=True, use_url=True)  # Adiciona o campo thumbnail
     arquivo_url = serializers.SerializerMethodField()
+    thumbnail_url = serializers.SerializerMethodField()
     
     class Meta:
         model = Video
-        fields = ['id', 'titulo', 'descricao', 'arquivo', 'arquivo_url', 'criado_em', 'professor', 'professor_nome', 'playlists', 'playlists_ids', 'thumbnail']
+        fields = ['id', 'titulo', 'descricao', 'arquivo', 'arquivo_url', 'criado_em', 'professor', 'professor_nome', 'playlists', 'playlists_ids', 'thumbnail', 'thumbnail_url']
         read_only_fields = ['id', 'criado_em', 'professor', 'playlists', 'thumbnail']
 
     def get_arquivo_url(self, obj):
         request = self.context.get('request')
         if obj.arquivo and request:
             url = request.build_absolute_uri(obj.arquivo.url)
+            if ':8081' not in url:
+                url = url.replace('api.majorssolutions.com.br', 'api.majorssolutions.com.br:8081')
+            return url
+        return None
+
+    def get_thumbnail_url(self, obj):
+        request = self.context.get('request')
+        if obj.thumbnail and request:
+            url = request.build_absolute_uri(obj.thumbnail.url)
             if ':8081' not in url:
                 url = url.replace('api.majorssolutions.com.br', 'api.majorssolutions.com.br:8081')
             return url
