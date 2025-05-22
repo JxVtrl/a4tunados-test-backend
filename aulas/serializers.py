@@ -15,7 +15,7 @@ class VideoSerializer(serializers.ModelSerializer):
     )
     arquivo = serializers.FileField(required=True)
     professor_nome = serializers.CharField(source='professor.username', read_only=True)  # Adiciona o nome do professor
-    thumbnail = serializers.ImageField(read_only=True)  # Adiciona o campo thumbnail
+    thumbnail = serializers.ImageField(required=False, allow_null=True, use_url=True)  # Adiciona o campo thumbnail
     
     class Meta:
         model = Video
