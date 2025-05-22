@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'aulas',
     'corsheaders',
+    'drf_yasg',
 ]
 
 MIDDLEWARE = [
