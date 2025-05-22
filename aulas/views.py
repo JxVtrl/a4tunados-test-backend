@@ -25,15 +25,15 @@ class CustomTokenObtainPairView(TokenObtainPairView):
                 data['access'],
                 max_age=3600,
                 httponly=True,
-                samesite='Lax',
-                secure=False
+                samesite='None', 
+                secure=True  
             )
             response.set_cookie(
                 'refresh_token',
                 data['refresh'],
                 max_age=604800,
                 httponly=True,
-                samesite='Lax',
+                samesite='None',
                 secure=False
             )
             del response.data['access']
