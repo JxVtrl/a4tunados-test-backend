@@ -27,7 +27,8 @@ SECRET_KEY = 'django-insecure--0*_#)(h(2m280z!46&tu*_f=(b+^z_3c5al!)p5$$4z^cqkb@
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['*']  
+ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -163,7 +164,7 @@ SIMPLE_JWT = {
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'AUTH_COOKIE': 'access_token',
     'AUTH_COOKIE_REFRESH': 'refresh_token',
-    'AUTH_COOKIE_SECURE': False,
+    'AUTH_COOKIE_SECURE': False,  # True em produção com HTTPS
     'AUTH_COOKIE_HTTP_ONLY': True,
     'AUTH_COOKIE_SAMESITE': 'Lax',
 }
