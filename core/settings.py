@@ -32,6 +32,7 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     '.ngrok-free.app',
     'a4tunados-test-frontend.vercel.app',
+    'api.majorssolutions.com.br',
 ]
 
 
@@ -157,6 +158,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "https://a4tunados-test-frontend.vercel.app",
     "https://a4tunados-test-frontend-e3eganrb8-joo-vinicius-vitrals-projects.vercel.app",
+    "https://api.majorssolutions.com.br",
 ]
 
 # Configurar CSRF para aceitar cookies
@@ -164,6 +166,7 @@ CSRF_TRUSTED_ORIGINS = [
     "http://localhost:3000",  # Substitua pelo domínio do frontend
     "https://a4tunados-test-frontend.vercel.app",
     "https://a4tunados-test-frontend-e3eganrb8-joo-vinicius-vitrals-projects.vercel.app",
+    "https://api.majorssolutions.com.br",
 ]
 
 # Adicionar configurações de cookie JWT
