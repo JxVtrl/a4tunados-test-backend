@@ -1,7 +1,7 @@
 from rest_framework import viewsets, filters, generics
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.decorators import action
 from .models import Video, Playlist, User
 from .permissions import IsProfessorOrReadOnly
@@ -118,8 +118,11 @@ class VideoViewSet(viewsets.ModelViewSet):
     
 class RegisterView(generics.CreateAPIView):
     serializer_class = RegisterSerializer
-    permission_classes = []  # Permite acesso público
+    permission_classes = [AllowAny]
 
+    def options(self, request, *args, **kwargs):
+        response = super().options(request, *args, **kwargs)
+        return response
 
 class MeView(APIView):
     permission_classes = [IsAuthenticated]
